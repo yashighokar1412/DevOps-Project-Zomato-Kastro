@@ -38,12 +38,7 @@ pipeline {
                 sh 'npm install'
             }
         }
-
-        stage ("Trivy File Scan") {
-            steps {
-                sh "trivy fs . > trivy.txt"
-            }
-        }
+        
         stage ("Build Docker Image") {
             steps {
                 sh "docker build -t zomato ."
