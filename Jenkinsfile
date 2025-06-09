@@ -53,29 +53,21 @@ pipeline {
                         sh "docker push yashthedocker/zomato:latest"
                     }
                 }
+                
             }
         }
 
         stage("Deploy to Kubernetes") {
-            steps {
-                script {
-                    withAWS(credentials: 'aws', region: 'ap-south-1') {
-                        withKubeConfig(
-                            caCertificate: '', 
-                            clusterName: 'EKS_CLOUD', 
-                            contextName: 'arn:aws:eks:ap-south-1:822070281368:cluster/EKS_CLOUD', 
-                            credentialsId: 'k8s', 
-                            namespace: 'default', 
-                            restrictKubeConfigAccess: false, 
-                            serverUrl: 'https://8D865F2BE127EFBA59B6C5A721C24A36.yl4.ap-south-1.eks.amazonaws.com'
-                        ) {
-                            sh "kubectl apply -f deployment.yml"
-                            sh "kubectl apply -f service.yml"
-                            sh "kubectl get service"
+    steps {
+        script {
+            sh '''
+                aws eks update-kubeconfig --region ap-south-1 --name EKS_CLOUD
+                kubectl apply -f deployment.yml
+                kubectl apply -f service.yml
+                kubectl get service
+            '''
                         }
                     }
                 }
             }
         }
-    }
-}
