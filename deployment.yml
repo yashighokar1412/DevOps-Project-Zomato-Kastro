@@ -1,0 +1,21 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: myntra-deployment
+  labels:
+    app: myntra
+spec:
+  replicas: 2
+  selector:
+    matchLabels:
+      app: myntra
+  template:
+    metadata:
+      labels:
+        app: myntra
+    spec:
+      containers:
+      - name: myntra
+        image: yashthedocker/zomato:latest
+        ports:
+        - containerPort: 3000
