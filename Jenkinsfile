@@ -18,5 +18,13 @@ pipeline {
                 git 'https://github.com/KastroVKiran/Zomato-Project-Kastro.git'
             }
         }
+        stage("Sonarqube Analysis"){
+            steps{
+                withSonarQubeEnv('sonar-server') {
+                    sh ''' $SCANNER_HOME/bin/sonar-scanner -Dsonar.projectName=zomato \
+                    -Dsonar.projectKey=zomato '''
+                }
+            }
+        }
     }
 }
